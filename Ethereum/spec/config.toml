@@ -9,7 +9,7 @@ force = true
 hosts = ["all"]
 apis = ["all"]
 interface = "all"
-cors = ["https://remix.ethereum.org"]
+cors = ["https://remix.ethereum.org", "http://remix.ethereum.org"]
 
 [websockets]
 interface = "all"

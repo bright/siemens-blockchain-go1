@@ -1,0 +1,23 @@
+namespace org.manufactureStorage
+
+enum ProductionBatchStatus {
+  o CREATED
+  o PENDING_CERTIFICATION
+}
+
+asset ProductionBatch identified by jobId {
+  o String jobId default = "345"
+  o Integer designId default = 12321
+  o String machineId default = "IE23V3"
+  o ProductionBatchStatus batchStatus default = "CREATED"
+}
+
+transaction UpdateProductionBatchStatus{
+  o ProductionBatchStatus batchStatus
+  --> ProductionBatch batch
+}
+
+event UpdateProductionBatchEvent {
+  o ProductionBatchStatus batchStatus
+  o ProductionBatch batch
+}

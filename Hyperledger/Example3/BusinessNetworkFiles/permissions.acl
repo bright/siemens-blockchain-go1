@@ -1,0 +1,60 @@
+rule NetworkAdminUser {
+    description: "Grant business network admin create and read access to all resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: CREATE, READ
+    resource: "**"
+    action: ALLOW
+}
+
+rule SystemACL {
+    description: "All participants can view and create system assets"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: CREATE, READ
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+rule NetworkACL {
+    description: "All participants can view network assets"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: READ
+    resource: "org.manufactureStorage.**"
+    action: ALLOW
+}
+
+rule ParticipantsTransaction {
+    description: "Pariticipants can update production batch only by creating custom transaction"
+    participant(p): "org.hyperledger.composer.system.Participant"
+    operation: UPDATE, READ
+    resource(r): "org.manufactureStorage.ProductionBatch"
+    transaction(tx): "org.manufactureStorage.UpdateProductionBatchStatus"
+    condition:(Boolean(tx))
+    action: ALLOW
+}
+
+rule ManufactureRepresentativeProductionBatch {
+ 	description: "Only manufcature representative can create production batch"
+    participant: "org.manufactureStorage.ManufactureRepresentative"
+    operation: CREATE
+    resource: "org.manufactureStorage.ProductionBatch"
+    action: ALLOW
+}
+rule ManufactureRepresentativeTransactionCreate {
+    description: "Manufacture representative can create transaction only in particular state"
+    participant(p): "org.manufactureStorage.ManufactureRepresentative"
+    operation: CREATE
+    resource(t): "org.manufactureStorage.UpdateProductionBatchStatus"
+  	condition: (t.batchStatus == "PENDING_CERTIFICATION" && t.batch.batchStatus == "CREATED")
+    action: ALLOW
+}
+
+
+rule CATransactionCreate {
+  	description: "Ca Authority can create transaction only in particular state"
+    participant: "org.manufactureStorage.CertificationAuthority"
+    operation: CREATE
+    resource(t): "org.manufactureStorage.UpdateProductionBatchStatus"
+    condition: (t.batchStatus == "CERTIFIED" && t.batch.batchStatus == "PENDING_CERTIFICATION")
+    action: ALLOW
+}
+

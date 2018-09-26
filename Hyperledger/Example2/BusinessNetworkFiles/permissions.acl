@@ -1,0 +1,7 @@
+rule NetworkAdminUser {
+    description: "Grant business network admin create and read access to all resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: CREATE, READ, UPDATE
+    resource: "**"
+    action: ALLOW
+}

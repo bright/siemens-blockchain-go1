@@ -1,0 +1,7 @@
+query PendingBatches {
+    description: "Select all ProductionBatches that require certification"
+    statement:
+        SELECT org.manufactureStorage.ProductionBatch
+            WHERE (batchStatus == 'PENDING_CERTIFICATION')
+                ORDER BY [jobId ASC]
+}
